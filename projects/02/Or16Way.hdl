@@ -1,0 +1,10 @@
+//判断16位输入是否有0
+ CHIP Or16Way {
+    IN in[16];
+    OUT out;
+
+    PARTS:
+    Or8Way(in=in[0..7],out=or1);
+	Or8Way(in=in[8..15],out=or2);
+	Or(a=or1,b=or2,out=out);
+}

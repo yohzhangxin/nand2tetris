@@ -14,4 +14,7 @@ CHIP HalfAdder {
 
     PARTS:
     // Put you code here:
+	//carry :and ; sum :xor
+	And(a=a,b=b,out=carry);
+	Xor(a=a,b=b,out=sum);
 }

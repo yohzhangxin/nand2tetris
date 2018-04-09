@@ -35,7 +35,7 @@ CHIP ALU {
         ny, // negate the y input?
         f,  // compute out = x + y (if 1) or x & y (if 0)
         no; // negate the out output?
-
+  
     OUT 
         out[16], // 16-bit output
         zr, // 1 if (out == 0), 0 otherwise
@@ -43,4 +43,47 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   //zx=1 输入的x要置0,0输出x
+   Mux16(a=x,b=false,sel=zx,out=zxout);
+   //nx=1则输出相反
+   Not16(in=zxout,out=xout);
+   Mux16(a=zxout,b=xout,sel=nx,out=nxout);
+   //zy
+   Mux16(a=y,b=false,sel=zy,out=zyout);
+   //ny
+   Not16(in=zyout,out=yout);
+   Mux16(a=zyout,b=yout,sel=ny,out=nyout);
+   //2-补码加法，16位全加器
+   Add16(a=nxout,b=nyout,out=addout);
+   //&
+   And16(a=nxout,b=nyout,out=andout);
+   //f
+   Mux16(a=andout,b=addout,sel=f,out=fout);
+   //no:对结果进行取反操作
+   Not16(in=fout,out=nonout);
+   Mux16(a=fout,b=nonout,sel=no,out=noout);
+   //the output 
+   Mux16(a=noout,b=false,sel=false,out=out);
+   //zr 和 ng
+   Or16Way(in=noout,out=zrout);
+   Not(in=zrout,out=zr);
+   Isneg(in=noout,out=ng);
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
 }
